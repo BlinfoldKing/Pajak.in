@@ -1,3 +1,8 @@
+package pajakin.model;
+import pajakin.model.Tax;
+import pajakin.model.Taxable;
+import pajakin.model.Property;
+
 public class PBB extends Tax implements Taxable {
     /* Term used in this section */
     // PBB      : Pajak Bumi Bangunan

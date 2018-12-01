@@ -1,3 +1,9 @@
+package pajakin.model;
+
+import pajakin.model.Tax;
+import pajakin.model.Taxable;
+import pajakin.model.Person;
+
 public class PPh extends Tax implements Taxable {
     /* Term used in this section */
     // PPh  : Pajak Penghasilan

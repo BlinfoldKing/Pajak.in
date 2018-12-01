@@ -1,3 +1,8 @@
+package pajakin.model;
+
+import pajakin.model.Tax;
+import pajakin.model.Taxable;
+
 public class PKB extends Tax implements Taxable {
     /* Term used in this section */
     // PKB      : Pajak Kendaraan Bermotor

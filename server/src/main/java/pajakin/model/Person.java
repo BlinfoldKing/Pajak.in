@@ -1,4 +1,8 @@
+package pajakin.model;
+
 import java.util.*;
+
+import pajakin.model.Tax;
 
 public class Person {
     /* Term used in this section */

@@ -1,3 +1,5 @@
+package pajakin.model;
+
 public class Vehicle {
 
     private String plateNumber;

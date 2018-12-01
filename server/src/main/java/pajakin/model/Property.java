@@ -1,3 +1,5 @@
+package pajakin.model;
+
 public class Property {
     /* Please note the area in this section using m2
     and the sale value in this section is sale value per area */
