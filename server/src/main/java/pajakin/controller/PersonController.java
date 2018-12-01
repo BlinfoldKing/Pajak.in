@@ -51,4 +51,23 @@ public class PersonController {
         }
         Database.personList = newList;
     }
+
+    @PostMapping("/person/edit/{fullname}/{nik}/{npwp}/{salary}/{allowance}/{married}/{children}")
+    public void editPerson(
+        @PathVariable String fullname,
+        @PathVariable String nik,
+        @PathVariable String npwp,
+        @PathVariable double salary,
+        @PathVariable double allowance,
+        @PathVariable boolean married,
+        @PathVariable int children
+    ) {
+        for (Person p: Database.personList) {
+            if (npwp.matches(p.getNPWP())) {
+                Database.personList.remove(p);
+                Database.personList.add(new Person(fullname, nik, npwp, salary, allowance, married, children));
+                break;
+            }
+        }
+    }
 }
