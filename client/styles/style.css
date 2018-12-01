@@ -17,3 +17,36 @@ body {
 input {
     margin-bottom: 10px;
 }
+
+.user-list {
+    background-color: white;
+    top: 20%;
+    padding: 50px;
+    border-radius: 10px;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.data {
+    width: 70%;
+}
+
+.content .data div{
+    display: flex;
+    justify-content: space-between;
+}
+
+.props {
+    font-weight: 700;
+}
+
+.content button {
+    margin-top: 30px;
+}
+
+.table {
+    border: solid 1px black;
+}
