@@ -3,6 +3,8 @@ package pajakin.model;
 import java.util.*;
 
 import pajakin.model.Tax;
+import pajakin.model.taxWrapper;
+
 
 public class Person {
     /* Term used in this section */
@@ -43,6 +45,10 @@ public class Person {
         this.children = children;
         taxList = new LinkedList<Tax>();
         ownership = new LinkedList<Taxable>();
+    }
+
+    public List<Taxable> getOwnership() {
+        return this.ownership;
     }
 
     public void setFullName(String fullName) {
@@ -124,6 +130,14 @@ public class Person {
 
     public void processSalary() {
         taxList.add(new PPh(this));
+    }
+
+    public List<taxWrapper> getTax() {
+        List<taxWrapper> tax = new ArrayList<taxWrapper>();
+        for (Tax t: taxList) {
+            tax.add(new taxWrapper(t.countTax(), t.getClass().toString()));
+        }
+        return tax;
     }
 
     public void processOwnership() {

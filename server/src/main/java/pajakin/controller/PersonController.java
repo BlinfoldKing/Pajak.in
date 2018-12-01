@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import pajakin.model.Person;
-import pajakin.controller.Database;;
+import pajakin.model.Tax;
+import pajakin.model.Taxable;
+import pajakin.model.Vehicle;
+import pajakin.controller.Database;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -67,6 +70,36 @@ public class PersonController {
                 Database.personList.remove(p);
                 Database.personList.add(new Person(fullname, nik, npwp, salary, allowance, married, children));
                 break;
+            }
+        }
+    }
+
+    @GetMapping("/person/{npwp}/vehicle")
+    public List<Vehicle> getVehicle(@PathVariable String npwp){
+        List<Vehicle> vehicleList = new ArrayList<Vehicle>();
+        for (Person p: Database.personList) {
+            if (npwp.matches(p.getNPWP())) {
+                for (Taxable t: p.getOwnership()) {
+                    if (t instanceof Vehicle) {
+                        vehicleList.add((Vehicle) t);
+                    }
+                }
+                break;
+            }
+        }
+        return vehicleList;
+    }
+
+    @GetMapping("/person/{npwp}/vehicle/add/{plateNumber}/{taxValue}")
+    public void addVehicle(
+        @PathVariable String npwp,
+        @PathVariable String plateNumber,
+        @PathVariable double taxValue
+    ){
+        List<Vehicle> vehicleList = new ArrayList<Vehicle>();
+        for (Person p: Database.personList) {
+            if (npwp.matches(p.getNPWP())) {
+                p.addOwnership((Taxable) new Vehicle(plateNumber, taxValue));                
             }
         }
     }
