@@ -18,11 +18,15 @@ input {
     margin-bottom: 10px;
 }
 
-.user-list {
+.user-list, .user-input {
     background-color: white;
     top: 20%;
     padding: 50px;
     border-radius: 10px;
+}
+
+.user-input {
+    width: 700px;
 }
 
 .content {
@@ -49,4 +53,26 @@ input {
 
 .table {
     border: solid 1px black;
+}
+
+.user-input input {
+    width: auto
+}
+
+input.number {
+    margin-right: 0;
+}
+
+.user-input div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-input span {
+    font-weight: 700;
+}
+
+.checkbox {
+    margin: 20px;
+    right: 50%;
 }
