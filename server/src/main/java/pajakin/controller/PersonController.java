@@ -19,4 +19,17 @@ public class PersonController {
     public List<Person> getAll() {
         return Database.personList;
     }
+
+    @PostMapping("/person/add/{fullname}/{nik}/{npwp}/{salary}/{allowance}/{married}/{children}")
+    public void addPerson(
+        @PathVariable String fullname,
+        @PathVariable String nik,
+        @PathVariable String npwp,
+        @PathVariable double salary,
+        @PathVariable double allowance,
+        @PathVariable boolean married,
+        @PathVariable int children
+    ) {
+        Database.personList.add(new Person(fullname, nik, npwp, salary, allowance, married, children));
+    }
 }
