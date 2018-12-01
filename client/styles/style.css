@@ -76,3 +76,13 @@ input.number {
     margin: 20px;
     right: 50%;
 }
+
+.content div .extra-data {
+    display: flex;
+    justify-content: space-between;
+}
+
+.extra-data .table {
+    margin-top: 10px;
+    width: 300px;
+}
