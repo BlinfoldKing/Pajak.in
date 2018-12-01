@@ -16,6 +16,8 @@ import pajakin.model.Person;
 import pajakin.model.Tax;
 import pajakin.model.Taxable;
 import pajakin.model.Vehicle;
+import pajakin.model.taxWrapper;
+import pajakin.model.Property;
 import pajakin.controller.Database;
 
 import java.util.List;
@@ -102,5 +104,53 @@ public class PersonController {
                 p.addOwnership((Taxable) new Vehicle(plateNumber, taxValue));                
             }
         }
+    }
+
+    @GetMapping("/person/{npwp}/property")
+    public List<Property> getProperty(@PathVariable String npwp){
+        List<Property> propertyList = new ArrayList<Property>();
+        for (Person p: Database.personList) {
+            if (npwp.matches(p.getNPWP())) {
+                for (Taxable t: p.getOwnership()) {
+                    if (t instanceof Property) {
+                        propertyList.add((Property) t);
+                    }
+                }
+                break;
+            }
+        }
+        return propertyList;
+    }
+
+    @GetMapping("/person/{npwp}/vehicle/add/{address}/{landArea}/{landSaleValue}/{buildingArea}/{buildingSaleValue}")
+    public void addVehicle(
+        @PathVariable String npwp,
+        @PathVariable String address,
+        @PathVariable double landArea,
+        @PathVariable double landSaleValue,
+        @PathVariable double buildingArea,
+        @PathVariable double buildingSaleValue
+    ){
+        List<Vehicle> vehicleList = new ArrayList<Vehicle>();
+        for (Person p: Database.personList) {
+            if (npwp.matches(p.getNPWP())) {
+                p.addOwnership((Taxable) new Property(address, landArea, landSaleValue, buildingArea, buildingSaleValue));                
+            }
+        }
+    }
+
+    @GetMapping("/person/{npwp}/tax/")
+    public List<taxWrapper> getTax(@PathVariable String npwp) {
+        
+        List<taxWrapper> res = new ArrayList<taxWrapper>();
+        for (Person p: Database.personList) {
+            if (npwp.matches(p.getNPWP())) {
+                p.processOwnership();
+                p.processSalary();
+                res = p.getTax();
+                break;
+            }
+        }
+        return res;
     }
 }
