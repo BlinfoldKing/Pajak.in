@@ -36,9 +36,4 @@ public class PBB extends Tax implements Taxable {
 
         return tax;
     }
-
-    public String toString() {
-        // to be implemented
-        return "";
-    }
 }

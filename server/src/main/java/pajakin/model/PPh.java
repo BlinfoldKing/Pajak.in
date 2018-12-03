@@ -40,9 +40,4 @@ public class PPh extends Tax implements Taxable {
 
         return tax;
     }
-
-    public String toString() {
-        // to be implemented
-        return "";
-    }
 }
