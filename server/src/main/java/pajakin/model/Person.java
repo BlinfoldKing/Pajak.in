@@ -5,17 +5,21 @@ import java.util.*;
 import pajakin.model.Tax;
 import pajakin.model.taxWrapper;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "Person")
 public class Person {
     /* Term used in this section */
     // NIK  : Nomor Induk Kendaraan
     // NPWP : Nomor Pokok Wajib Pajak
 
     /* Please note the salary, allowance, pensionFee is per month */
-
+    @Id
+    private String NPWP;
+    
     private String fullName;
     private String NIK;
-    private String NPWP;
     private double salary;
     private double allowance;
     private boolean married;

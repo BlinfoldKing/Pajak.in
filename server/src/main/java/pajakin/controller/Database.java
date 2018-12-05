@@ -1,10 +1,19 @@
 package pajakin.controller;
 
-import java.util.List;
-import java.util.ArrayList;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import com.mongodb.MongoClient;
 
-import pajakin.model.Person;
-
+@Configuration
 public class Database {
-    public static List<Person> personList = new ArrayList<Person>();
+
+    public @Bean
+	MongoTemplate mongoTemplate() throws Exception {
+		
+		MongoTemplate mongoTemplate = 
+			new MongoTemplate(new MongoClient("127.0.0.1"),"PBO");
+		return mongoTemplate;
+		
+	}
 }

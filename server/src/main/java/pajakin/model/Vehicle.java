@@ -1,6 +1,6 @@
 package pajakin.model;
 
-public class Vehicle {
+public class Vehicle implements Taxable {
 
     private String plateNumber;
     private double taxValue;

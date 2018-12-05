@@ -3,17 +3,12 @@ package pajakin.controller;
 
 import java.util.List;
 
-import java.util.concurrent.atomic.AtomicLong;
-
-import javax.xml.crypto.Data;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import pajakin.model.Person;
-import pajakin.model.Tax;
 import pajakin.model.Taxable;
 import pajakin.model.Vehicle;
 import pajakin.model.taxWrapper;
@@ -23,12 +18,23 @@ import pajakin.controller.Database;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+
 @RestController
 public class PersonController {
 
+    ApplicationContext ctx = 
+        new AnnotationConfigApplicationContext(Database.class);
+    MongoOperations mongoOperation = 
+        (MongoOperations) ctx.getBean("mongoTemplate");
+
     @GetMapping("/person")
     public List<Person> getAll() {
-        return Database.personList;
+        return mongoOperation.findAll(Person.class);
     }
 
     @PostMapping("/person/add/{fullname}/{nik}/{npwp}/{salary}/{allowance}/{married}/{children}")
@@ -41,20 +47,13 @@ public class PersonController {
         @PathVariable boolean married,
         @PathVariable int children
     ) {
-        Database.personList.add(new Person(fullname, nik, npwp, salary, allowance, married, children));
+        Person p = new Person(fullname, nik, npwp, salary, allowance, married, children);
+        mongoOperation.insert(p);
     }
 
     @PostMapping("/person/delete/{npwp}")
     public void deletePerson(@PathVariable String npwp) {
-        List<Person> newList = new ArrayList<Person>();
-        for (Person p: Database.personList) {
-            if (!npwp.matches(p.getNPWP())) {
-                System.out.println(npwp);
-                System.out.println(p.getNPWP());
-                newList.add(p);
-            }
-        }
-        Database.personList = newList;
+        mongoOperation.findAndRemove(new Query(Criteria.where("_id").is(npwp)), Person.class);
     }
 
     @PostMapping("/person/edit/{fullname}/{nik}/{npwp}/{salary}/{allowance}/{married}/{children}")
@@ -67,63 +66,54 @@ public class PersonController {
         @PathVariable boolean married,
         @PathVariable int children
     ) {
-        for (Person p: Database.personList) {
-            if (npwp.matches(p.getNPWP())) {
-                Database.personList.remove(p);
-                Database.personList.add(new Person(fullname, nik, npwp, salary, allowance, married, children));
-                break;
-            }
-        }
+        Person p = mongoOperation.findOne(new Query(Criteria.where("_id").is(npwp)), Person.class);
+        p.setNIK(nik);
+        p.setAllowance(allowance);
+        p.setMarried(married);
+        p.setFullName(fullname);
+        p.setChildren(children);
+
+        mongoOperation.save(p);
     }
 
-    @GetMapping("/person/{npwp}/vehicle")
-    public List<Vehicle> getVehicle(@PathVariable String npwp){
-        List<Vehicle> vehicleList = new ArrayList<Vehicle>();
-        for (Person p: Database.personList) {
-            if (npwp.matches(p.getNPWP())) {
-                for (Taxable t: p.getOwnership()) {
-                    if (t instanceof Vehicle) {
-                        vehicleList.add((Vehicle) t);
-                    }
-                }
-                break;
+    @GetMapping("/person/{npwp}/vehicle") 
+    public List<Vehicle> getVehicle(@PathVariable String npwp) {
+        Person p =  mongoOperation.findOne(new Query(Criteria.where("_id").is(npwp)), Person.class); 
+        List<Vehicle> vList = new ArrayList<>(); 
+        for (Taxable t: p.getOwnership()) {
+            if (t instanceof Vehicle) {
+                vList.add((Vehicle) t);
             }
         }
-        return vehicleList;
+        return vList;
     }
 
-    @GetMapping("/person/{npwp}/vehicle/add/{plateNumber}/{taxValue}")
+    @PostMapping("/person/{npwp}/vehicle/add/{plateNumber}/{taxValue}")
     public void addVehicle(
         @PathVariable String npwp,
         @PathVariable String plateNumber,
         @PathVariable double taxValue
     ){
-        List<Vehicle> vehicleList = new ArrayList<Vehicle>();
-        for (Person p: Database.personList) {
-            if (npwp.matches(p.getNPWP())) {
-                p.addOwnership((Taxable) new Vehicle(plateNumber, taxValue));                
-            }
-        }
+        Person p =  mongoOperation.findOne(new Query(Criteria.where("_id").is(npwp)), Person.class); 
+        p.addOwnership((Taxable) new Vehicle(plateNumber, taxValue)); 
+
+        mongoOperation.save(p);
     }
 
     @GetMapping("/person/{npwp}/property")
     public List<Property> getProperty(@PathVariable String npwp){
-        List<Property> propertyList = new ArrayList<Property>();
-        for (Person p: Database.personList) {
-            if (npwp.matches(p.getNPWP())) {
-                for (Taxable t: p.getOwnership()) {
-                    if (t instanceof Property) {
-                        propertyList.add((Property) t);
-                    }
-                }
-                break;
+        Person p =  mongoOperation.findOne(new Query(Criteria.where("_id").is(npwp)), Person.class); 
+        List<Property> pList = new ArrayList<>(); 
+        for (Taxable t: p.getOwnership()) {
+            if (t instanceof Property) {
+                pList.add((Property) t);
             }
         }
-        return propertyList;
+        return pList;
     }
 
     @GetMapping("/person/{npwp}/vehicle/add/{address}/{landArea}/{landSaleValue}/{buildingArea}/{buildingSaleValue}")
-    public void addVehicle(
+    public void addProperty(
         @PathVariable String npwp,
         @PathVariable String address,
         @PathVariable double landArea,
@@ -131,26 +121,18 @@ public class PersonController {
         @PathVariable double buildingArea,
         @PathVariable double buildingSaleValue
     ){
-        List<Vehicle> vehicleList = new ArrayList<Vehicle>();
-        for (Person p: Database.personList) {
-            if (npwp.matches(p.getNPWP())) {
-                p.addOwnership((Taxable) new Property(address, landArea, landSaleValue, buildingArea, buildingSaleValue));                
-            }
-        }
+
+        Person p =  mongoOperation.findOne(new Query(Criteria.where("_id").is(npwp)), Person.class); 
+        p.addOwnership((Taxable) new Property(address, landArea, landSaleValue, buildingArea, buildingSaleValue));
+        mongoOperation.save(p);
     }
 
     @GetMapping("/person/{npwp}/tax/")
     public List<taxWrapper> getTax(@PathVariable String npwp) {
-        
-        List<taxWrapper> res = new ArrayList<taxWrapper>();
-        for (Person p: Database.personList) {
-            if (npwp.matches(p.getNPWP())) {
-                p.processOwnership();
-                p.processSalary();
-                res = p.getTax();
-                break;
-            }
-        }
-        return res;
+        Person p =  mongoOperation.findOne(new Query(Criteria.where("_id").is(npwp)), Person.class); 
+        p.processOwnership();
+        p.processSalary();
+
+        return p.getTax();
     }
 }
