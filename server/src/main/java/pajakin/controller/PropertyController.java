@@ -15,7 +15,9 @@ import java.util.ArrayList;
 
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+@CrossOrigin(origins = "http://localhost:5500")
 @RestController
 public class PropertyController {
 
