@@ -68,12 +68,11 @@ public class PersonController {
         Database.mongoOperation.save(p);
     }
 
-    @GetMapping("/person/{npwp}/tax/")
+    @GetMapping("/person/{npwp}/tax")
     public List<taxWrapper> getTax(@PathVariable String npwp) {
         Person p =  Database.mongoOperation.findOne(new Query(Criteria.where("_id").is(npwp)), Person.class); 
         p.processOwnership();
         p.processSalary();
-
         return p.getTax();
     }
 }

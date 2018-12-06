@@ -19,13 +19,6 @@ public class Property implements Taxable {
         this.buildingSaleValue = buildingSaleValue;
     }
 
-    // if it is only land without building
-    public Property(String address, double landArea, double landSaleValue) {
-        this.address = address;
-        this.landArea = landArea;
-        this.landSaleValue = landSaleValue;
-    }
-
     public void setAddress(String address) {
         this.address = address;
     }

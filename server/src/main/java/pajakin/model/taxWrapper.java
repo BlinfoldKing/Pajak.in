@@ -1,7 +1,7 @@
 package pajakin.model;
 
 public class taxWrapper {
-    public double val;
+    public double val = 0;
     public String type;
 
     taxWrapper(double val, String type) {

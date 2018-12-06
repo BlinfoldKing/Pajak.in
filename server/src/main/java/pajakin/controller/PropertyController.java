@@ -33,7 +33,7 @@ public class PropertyController {
         return pList;
     }
 
-    @PostMapping("/person/{npwp}/vehicle/add/{address}/{landArea}/{landSaleValue}/{buildingArea}/{buildingSaleValue}")
+    @PostMapping("/person/{npwp}/property/add/{address}/{landArea}/{landSaleValue}/{buildingArea}/{buildingSaleValue}")
     public void addProperty(
         @PathVariable String npwp,
         @PathVariable String address,

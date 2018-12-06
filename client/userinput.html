@@ -1,44 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>User List</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.css">
-    <link rel="stylesheet" href="styles/style.css">
-</head>
-<body>
-    <div class="container user-input">
-        <div>
-            <span>Full Name</span>
-            <input type="text" class="input" placeholder="Full Name">
-        </div>
-        <div>
-            <span>NPWP</span>
-            <input type="text" class="input" placeholder="NPWP">
-        </div>
-        <div>
-            <span>NIK</span>
-            <input type="text" class="input" placeholder="NIK">
-        </div>
-        <div>
-            <span>Salary</span>
-            <input type="number" class="input number" placeholder="Salary">
-        </div>
-        <div>
-            <span>Allowance</span>
-            <input type="number" class="input number" placeholder="Allowance">
-        </div>
-        <div>
-            <span>Marital status</span>
-            <input type="checkbox" class="checkbox"> 
-        </div>
-        <div>
-            <span>Number of Children</span>
-            <input type="number" class="input number" placeholder="Number of Child(ren)">
-        </div>
-        <button class="button is-info">Add</button>
+<div class="container user-input" ng-controller="person-input">
+    <div>
+        <span>Full Name</span>
+        <input ng-model="fullname" type="text" class="input" placeholder="Full Name">
     </div>
-</body>
-</html>
+    <div ng-if="!editMode">
+        <span>NPWP</span>
+        <input ng-model="$parent.npwp" type="text" class="input" placeholder="NPWP">
+    </div>
+    <div>
+        <span>NIK</span>
+        <input ng-model="nik" type="text" class="input" placeholder="NIK">
+    </div>
+    <div>
+        <span>Salary</span>
+        <input ng-model="salary" type="number" class="input number" placeholder="Salary">
+    </div>
+    <div>
+        <span>Allowance</span>
+        <input ng-model="allowance" type="number" class="input number" placeholder="Allowance">
+    </div>
+    <div>
+        <span>Marital status</span>
+        <input ng-model="marital" type="checkbox" class="checkbox">
+    </div>
+    <div>
+        <span>Number of Children</span>
+        <input ng-model="child" type="number" class="input number" placeholder="Number of Child(ren)">
+    </div>
+    <button ng-click="submit()" class="button is-info">Add</button>
+</div>
