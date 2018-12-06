@@ -27,7 +27,7 @@ public class PPh extends Tax implements Taxable {
         double pensionFeePerYear = 12*person.getPensionFee();
 
         // Check if the person is a taxpayer or not
-        if (salaryPerYear == PTKP) return 0;
+        if (salaryPerYear <= 54000000) return 0;
 
         // Calculate the bruto salary value
         double brutoSalary = salaryPerYear + allowancePerYear;
